@@ -9,6 +9,10 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.get("/info", (req, res) => {
+  res.send("API version 1");
+});
+
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
