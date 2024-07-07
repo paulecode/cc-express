@@ -14,7 +14,7 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/deploy", (req, res) => {
-  res.send("Deployment test 1");
+  res.send("Deployment test 2");
 });
 
 app.listen(PORT, () => {
