@@ -1,3 +1,4 @@
+import { Response, Request } from "express";
 import express from "express";
 import cors from "cors";
 
@@ -15,7 +16,7 @@ app.get("/info", (req, res) => {
   res.send("API version 1");
 });
 
-app.get("/deploy", (req, res) => {
+app.get("/deploy", (req: Request, res: Response) => {
   res.send("Deployment test 3");
 });
 
