@@ -1,22 +1,31 @@
 import { loginSchema } from "./validation";
 
-test("Test valid username and password", async () => {
-  const req = {
-    body: {
-      username: "Max",
-      password: "Mustermann",
-    },
-  };
-  const result = await loginSchema.safeParseAsync(req.body);
+describe("The validation works if", () => {
+  it("receives a valid request", () => {
+    const body = {
+      username: "walter",
+      password: "supersecure123!",
+    };
 
-  expect(result.success).toBeTruthy();
+    const result = loginSchema.safeParse(body);
 
-  if (result.success) {
-    const { data } = result;
-    const { username, password } = data;
-    expect(username).toBe("Max");
-    expect(password).toBe("Mustermann");
-  } else {
-    fail;
-  }
+    expect(result.success).toBeTruthy();
+  });
+  it("receives a too short username", () => {
+    const body = {
+      username: "wal",
+      password: 123,
+    };
+    const result = loginSchema.safeParse(body);
+
+    expect(result.success).toBeFalsy();
+
+    // ensure error property is not optional in scope
+    if (result.success) {
+      return;
+    }
+
+    expect(result.error.errors[0].code).toBe("too_small");
+    expect(result.error.errors[1].code).toBe("invalid_type");
+  });
 });
