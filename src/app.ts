@@ -4,7 +4,7 @@ import express from "express";
 import cors from "cors";
 import { loggerMiddleware } from "./middleware/loggerMiddleware";
 import authRouter from "./routes/auth";
-import { zodErrorMiddleware } from "./middleware/errorMiddleware";
+import { ErrorMiddleware } from "./middleware/errorMiddleware";
 
 const app = express();
 app.use(cors());
@@ -38,7 +38,7 @@ app.get("/fastapi", async (req: Request, res: Response) => {
 
 app.use("/auth", authRouter);
 
-app.use(zodErrorMiddleware);
+app.use(ErrorMiddleware);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
