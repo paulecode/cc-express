@@ -36,7 +36,7 @@ app.get("/fastapi", async (req: Request, res: Response) => {
   }
 });
 
-app.use(authRouter);
+app.use("/auth", authRouter);
 
 app.use(zodErrorMiddleware);
 
