@@ -7,6 +7,7 @@ export function ErrorMiddleware<ErrorT>(
   err: ErrorT,
   req: Request,
   res: Response,
+  next: NextFunction,
 ) {
   if (err instanceof ZodError) {
     logger.error(`Zod error occured on ${req.path}`);
