@@ -15,7 +15,7 @@ describe("The service works if, ", () => {
 
       expect(token).toBeDefined();
 
-      const secret = process.env.JWT_SECRET || "";
+      const secret = process.env.JWT_SECRET || "testSecret";
 
       const { sub } = jwt.verify(token, secret);
 

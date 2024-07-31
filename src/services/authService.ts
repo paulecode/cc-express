@@ -39,7 +39,7 @@ export async function doesHashMatchPassword(hash: string, password: string) {
 }
 
 export function generateToken(payload: string) {
-  const secret = process.env.JWT_SECRET || "";
+  const secret = process.env.JWT_SECRET || "testSecret";
 
   const token = jwt.sign({ sub: payload }, secret, {
     expiresIn: "1h",
@@ -49,8 +49,9 @@ export function generateToken(payload: string) {
 }
 
 export async function verifySignature(token: string) {
-  try {
-    const secret = process.env.SECRET || "";
-    const decodedToken = jwt.verify(token, secret);
-  } catch (e) {}
+  // try {
+  //   const secret = process.env.SECRET || "testSecret";
+  //   const decodedToken = jwt.verify(token, secret);
+  // } catch (e) {
+  // }
 }
