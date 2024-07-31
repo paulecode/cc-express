@@ -15,7 +15,7 @@ export async function register(
 
     try {
       const newId = await createAccount(username, password);
-      res.json({ username, password, newId });
+      res.json({ username, newId });
     } catch (err) {
       return res.status(400).json({ error: (err as Error).message });
     }
