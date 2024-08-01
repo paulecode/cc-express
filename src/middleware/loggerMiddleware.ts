@@ -2,6 +2,7 @@ import { NextFunction, Response, Request } from "express";
 import { logger } from "../utils/logger";
 
 export function loggerMiddleware(
+  err: Error,
   req: Request,
   res: Response,
   next: NextFunction,
