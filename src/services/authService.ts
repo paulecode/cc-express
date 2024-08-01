@@ -3,14 +3,14 @@ import bcrypt from "bcrypt";
 import { checkAccountExistsByUsername } from "../helpers/accountExists";
 import prisma from "../lib/db";
 import { logger } from "../utils/logger";
+import { getUserByUsername } from "./userService";
 
 export async function createAccount(username: string, password: string) {
-  const accountExists = await checkAccountExistsByUsername(username);
-  if (accountExists) {
-    throw new Error("usernameTaken");
-  }
-
   try {
+    const accountExists = await checkAccountExistsByUsername(username);
+    if (accountExists) {
+      throw new Error("usernameTaken");
+    }
     password = await hashPassword(password);
     const accountCreated = await prisma.user.create({
       data: { username, password },
@@ -49,9 +49,31 @@ export function generateToken(payload: string) {
 }
 
 export async function verifySignature(token: string) {
-  // try {
-  //   const secret = process.env.SECRET || "testSecret";
-  //   const decodedToken = jwt.verify(token, secret);
-  // } catch (e) {
-  // }
+  try {
+    const secret = process.env.JWT_SECRET || "testSecret";
+    const decodedToken = jwt.verify(token, secret);
+    return decodedToken;
+  } catch (e) {
+    throw new Error("loginError");
+  }
+}
+
+export async function attemptLogin(username: string, password: string) {
+  try {
+    if (!(await checkAccountExistsByUsername(username))) {
+      throw new Error("Account doesn't exist");
+    }
+
+    const user = await getUserByUsername(username);
+
+    if (await doesHashMatchPassword(user.password, password)) {
+      const token = generateToken(user.id.toString());
+      return token;
+    } else {
+      throw new Error("Invalid credentials");
+    }
+  } catch (err) {
+    logger.error((err as Error).message);
+    return false;
+  }
 }
