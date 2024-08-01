@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { loginSchema } from "./validation";
-import { createAccount } from "../services/authService";
+import {
+  attemptLogin,
+  createAccount,
+  doesHashMatchPassword,
+} from "../services/authService";
 import { checkAccountExistsByUsername } from "../helpers/accountExists";
 
 export async function register(
@@ -30,9 +34,13 @@ export async function login(req: Request, res: Response, next: NextFunction) {
   if (zodResult.success) {
     const { username, password } = zodResult.data;
 
-    const result = await checkAccountExistsByUsername(username);
+    const loginAttempt = await attemptLogin(username, password);
 
-    res.json({ result });
+    if (!loginAttempt) {
+      return res.sendStatus(401);
+    }
+
+    res.json({ result: loginAttempt });
   } else {
     next(zodResult.error);
   }
