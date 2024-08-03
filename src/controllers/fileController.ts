@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { fileUpload } from "../services/fileService";
+import { fileUploadService } from "../services/fileService";
 
 export async function uploadFileToS3(
   req: Request,
@@ -13,7 +13,7 @@ export async function uploadFileToS3(
   }
 
   try {
-    const result = await fileUpload("classifying-classic-data", file);
+    const result = await fileUploadService("classifying-classic-data", file);
     return res.json(result);
   } catch (err) {
     return res.sendStatus(500);

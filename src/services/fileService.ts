@@ -1,7 +1,7 @@
 import { s3 } from "../lib/s3";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
-export async function fileUpload(
+export async function fileUploadService(
   bucketName: string,
   file: Express.Multer.File,
 ) {
