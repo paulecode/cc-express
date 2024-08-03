@@ -5,6 +5,7 @@ import cors from "cors";
 import { loggerMiddleware } from "./middleware/loggerMiddleware";
 import authRouter from "./routes/auth";
 import { ErrorMiddleware } from "./middleware/errorMiddleware";
+import fileRouter from "./routes/file";
 
 const app = express();
 app.use(cors());
@@ -37,6 +38,7 @@ app.get("/fastapi", async (req: Request, res: Response) => {
 });
 
 app.use("/auth", authRouter);
+app.use("/files", fileRouter);
 
 app.use(ErrorMiddleware);
 
