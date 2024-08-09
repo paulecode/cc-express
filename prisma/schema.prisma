@@ -14,8 +14,20 @@ datasource db {
 }
 
 model User {
-  id       Int     @unique @default(autoincrement())
-  username String
+  id       Int            @unique @default(autoincrement())
+  username String         @unique
   name     String?
   password String
+  files    UploadedFile[]
+}
+
+model UploadedFile {
+  id       Int     @unique @default(autoincrement())
+  key      String  @unique
+  filename String
+  mimetype String
+  version  String
+  success  Boolean
+  User     User?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId   Int?
 }
