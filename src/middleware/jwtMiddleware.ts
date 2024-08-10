@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { verifySignature } from "../services/authService";
 import { logger } from "../utils/logger";
+import { decodedTokenSchema } from "./validation";
 
 export async function hasValidSignature(
   req: Request,
@@ -20,8 +21,19 @@ export async function hasValidSignature(
   }
 
   try {
-    const { sub } = await verifySignature(token);
-    req.body.id = sub;
+    const decodedToken = await verifySignature(token);
+
+    const validatedDecodedToken = decodedTokenSchema.safeParse(decodedToken);
+
+    if (!validatedDecodedToken.success) {
+      return res.json({
+        message: "Something went wrong while decoding the token",
+      });
+    }
+
+    const { sub } = validatedDecodedToken.data;
+
+    req.userId = sub;
     next();
   } catch (e) {
     logger.error((e as Error).message);

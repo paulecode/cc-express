@@ -5,7 +5,16 @@ import {
   createAccount,
   doesHashMatchPassword,
 } from "../services/authService";
-import { checkAccountExistsByUsername } from "../helpers/accountExists";
+import {
+  checkAccountExistsById,
+  checkAccountExistsByUsername,
+} from "../helpers/accountExists";
+import {
+  createDeleteObjectsArray,
+  deleteMultipleObjects,
+  getAllUserFileKeys,
+} from "../services/fileService";
+import { deleteUser } from "../services/userService";
 
 export async function register(
   req: Request,
@@ -43,5 +52,31 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     res.json({ result: loginAttempt });
   } else {
     next(zodResult.error);
+  }
+}
+
+export async function deleteAccount(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  const id = req.userId!;
+
+  if (!(await checkAccountExistsById(id))) {
+    return res.json({ message: "Account doesn't exist anymore" });
+  }
+
+  try {
+    const filesToDelete = await getAllUserFileKeys(id);
+
+    const filesClustered = createDeleteObjectsArray(filesToDelete);
+
+    await deleteMultipleObjects(filesClustered);
+
+    const deletedUser = await deleteUser(id);
+
+    return res.json({ message: deletedUser.username });
+  } catch (err) {
+    next();
   }
 }

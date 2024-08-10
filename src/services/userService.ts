@@ -8,3 +8,11 @@ export async function getUserByUsername(username: string) {
     throw new Error((err as Error).message);
   }
 }
+
+export async function deleteUser(id: number) {
+  try {
+    return await prisma.user.delete({ where: { id } });
+  } catch (err) {
+    throw new Error((err as Error).message);
+  }
+}

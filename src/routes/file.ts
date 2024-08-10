@@ -1,6 +1,10 @@
 import { Router } from "express";
 import upload from "../lib/multer";
-import { uploadFileToS3 } from "../controllers/fileController";
+import {
+  deleteSingleFile,
+  getAllFiles,
+  uploadRawFileToS3,
+} from "../controllers/fileController";
 import { hasValidSignature } from "../middleware/jwtMiddleware";
 const fileRouter = Router();
 
@@ -8,7 +12,10 @@ fileRouter.post(
   "/uploadFile",
   hasValidSignature,
   upload.single("file"),
-  uploadFileToS3,
+  uploadRawFileToS3,
 );
+
+fileRouter.get("/getFile", hasValidSignature, getAllFiles);
+fileRouter.delete("/deleteSingle", hasValidSignature, deleteSingleFile);
 
 export default fileRouter;
