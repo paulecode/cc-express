@@ -1,14 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { loginSchema } from "./validation";
-import {
-  attemptLogin,
-  createAccount,
-  doesHashMatchPassword,
-} from "../services/authService";
-import {
-  checkAccountExistsById,
-  checkAccountExistsByUsername,
-} from "../helpers/accountExists";
+import { attemptLogin, createAccount } from "../services/authService";
+import { checkAccountExistsById } from "../helpers/accountExists";
 import {
   createDeleteObjectsArray,
   deleteMultipleObjects,
