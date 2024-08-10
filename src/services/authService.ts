@@ -42,7 +42,7 @@ export function generateToken(payload: string) {
   const secret = process.env.JWT_SECRET || "testSecret";
 
   const token = jwt.sign({ sub: payload }, secret, {
-    expiresIn: "1h",
+    expiresIn: "1w",
   });
 
   return token;
