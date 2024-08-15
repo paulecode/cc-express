@@ -26,7 +26,6 @@ model UploadedFile {
   key      String  @unique
   filename String
   mimetype String
-  version  String
   success  Boolean
   User     User?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId   Int?

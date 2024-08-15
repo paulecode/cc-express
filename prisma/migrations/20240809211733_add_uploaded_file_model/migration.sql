@@ -4,7 +4,6 @@ CREATE TABLE "UploadedFile" (
     "key" TEXT NOT NULL,
     "filename" TEXT NOT NULL,
     "mimetype" TEXT NOT NULL,
-    "version" TEXT NOT NULL,
     "success" BOOLEAN NOT NULL,
     "userId" INTEGER
 );
