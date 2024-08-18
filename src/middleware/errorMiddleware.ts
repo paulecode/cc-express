@@ -23,7 +23,8 @@ export function ErrorMiddleware<ErrorT>(
     logger.warn(
       "Error landed here without being an error, unhandled exception!",
     );
-    logger.warn(err);
+    logger.warn((err as Error).message);
   }
-  return res.status(400).json({ "Unknown Error": err });
+  logger.error((err as Error).message);
+  return res.status(400).json({ "Unknown Error": (err as Error).message });
 }
