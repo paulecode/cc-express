@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import {
   checkIfFileExists,
-  createDeleteObjectsArray,
   deleteSingleObject,
   deleteSingleObjectInfo,
   fileUploadService,
@@ -16,7 +15,7 @@ import {
   singleFileDeletionRequestSchema,
 } from "./validation";
 
-export async function uploadRawFileToS3(
+export async function handleFileUpload(
   req: Request,
   res: Response,
   next: NextFunction,
@@ -36,10 +35,8 @@ export async function uploadRawFileToS3(
     return res.status(400).json({ message: "Something went wrong" });
   }
 
-  const { version } = zodResult.data;
-
   try {
-    const key = generateFileKey(file.originalname, file.mimetype, version, id);
+    const key = generateFileKey(file.originalname, file.mimetype, id);
 
     const fileExists = await checkIfFileExists(key);
 
@@ -53,7 +50,6 @@ export async function uploadRawFileToS3(
       key,
       file.originalname,
       file.mimetype,
-      version,
       id,
     );
 
@@ -68,13 +64,10 @@ export async function uploadRawFileToS3(
   }
 }
 
-export async function getAllFiles(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function getAllUserFiles(req: Request, res: Response) {
   const id = req.userId!;
 
+  // todo try catch
   const filekeys = await getAllUserFileKeys(id);
 
   return res.json(filekeys);
