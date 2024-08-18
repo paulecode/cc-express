@@ -40,7 +40,6 @@ export async function saveFileInfoToDatabase(
   key: string,
   filename: string,
   mimetype: string,
-  version: string,
   userId: number,
 ) {
   try {
@@ -50,12 +49,10 @@ export async function saveFileInfoToDatabase(
         filename,
         mimetype,
         success: false,
-        version,
         userId: userId as number,
       },
     });
   } catch (err) {
-    logger.error(err);
     throw new Error(
       "Something went wrong while saving file in database, aborting",
     );
@@ -79,10 +76,9 @@ export async function checkIfFileExists(key: string) {
 export function generateFileKey(
   filename: string,
   filetype: string,
-  version: string,
   userId: number,
 ) {
-  return `${filetype}/${version}/${userId}/${filename}`;
+  return `${filetype}/${userId}/${filename}`;
 }
 
 export async function getAllUserFileKeys(userId: number) {
